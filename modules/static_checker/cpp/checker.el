@@ -1,0 +1,25 @@
+(global-flycheck-mode)
+;(setq flycheck-clang-language-standard "c++11")
+;tt(setq flycheck-clang-standard-library "libc++")
+
+
+(unless (package-installed-p 'flycheck-inline)
+  (package-install 'flycheck-inline))
+
+
+(with-eval-after-load 'flycheck
+  (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
+
+;; CEDET settings
+(require 'cedet) ;; использую "вшитую" версию CEDET. Мне хватает...
+(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-show-parser-state-mode)
+(semantic-mode   t)
+(global-ede-mode t)
+(require 'ede/generic)
+(require 'semantic/ia)
+(ede-enable-generic-projects)

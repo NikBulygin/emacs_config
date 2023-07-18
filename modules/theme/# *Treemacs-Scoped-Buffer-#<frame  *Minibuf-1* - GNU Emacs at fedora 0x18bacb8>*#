@@ -1,0 +1,17 @@
+  .emacs.d
+    .cache
+    auto-save-list
+    eln-cache/28.2-ae1d5282
+    elpa
+    modules
+      file_explorer
+      fonts
+      projectile
+      theme
+         *Treemacs-Scoped-Buffer-#<frame  *Minibuf-1* - GNU Emacs at fedora 0x18bacb8>*
+        doomtheme.el
+    transient
+    init.el
+    main.cpp
+    projectile-bookmarks.eld
+    projects

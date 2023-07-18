@@ -1,0 +1,16 @@
+  .emacs.d
+    .cache
+    auto-save-list
+    eln-cache/28.2-ae1d5282
+    elpa
+    modules
+      file_explorer
+      fonts
+      projectile
+      theme
+        doomtheme.el
+    transient
+    init.el
+    main.cpp
+    projectile-bookmarks.eld
+    projects
