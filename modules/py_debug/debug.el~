@@ -1,0 +1,23 @@
+(use-package python-mode
+  :ensure t
+  :hook (python-mode . lsp-deferred)
+  :custom
+  ;; NOTE: Set these if Python 3 is called "python3" on your system!
+  (python-shell-interpreter "python3")
+  (dap-python-executable "python3 -m")
+  (dap-python-debugger 'debugpy))
+
+(use-package dap-mode
+  :ensure t
+  :config
+  (require 'dap-python))
+
+(dap-register-debug-template
+  "Python :: Run file (buffer)"
+  (list :type "python"
+        :request "launch"
+        :program nil
+        :module nil
+        :name "Python :: Run file (buffer)"
+        :console "integratedTerminal"
+        :args []))

@@ -24,8 +24,8 @@
 (setq show-paren-style 'expression) ;; выделить цветом выражения между {},[],()
 
 ;; Disable GUI components
-(tooltip-mode      -1)
-(menu-bar-mode     -1) ;; отключаем графическое меню
+;(tooltip-mode      -1)
+;(menu-bar-mode     -1) ;; отключаем графическое меню
 ;; (tool-bar-mode     -1) ;; отключаем tool-bar
 ;; (scroll-bar-mode   -1) ;; отключаем полосу прокрутки
 ;; (blink-cursor-mode -1) ;; курсор не мигает
@@ -63,3 +63,21 @@
 
 (global-display-fill-column-indicator-mode 1)
 (setq-default fill-column 80)
+
+
+(defun highlight-active-buffer ()
+  (walk-windows (lambda (w)
+                  (unless (eq w (selected-window))
+                    (with-current-buffer (window-buffer w)
+                      (buffer-face-set '(:background "#333"))))))
+  (buffer-face-set 'default))
+
+(defun auto-fill-my-code ()
+  (setq-local comment-auto-fill-only-comments t)
+  (setq-local fill-column 80)
+  (auto-fill-mode 1))
+
+(add-hook 'prog-mode-hook 'auto-fill-my-code)
+
+
+(add-hook 'buffer-list-update-hook 'highlight-active-buffer)

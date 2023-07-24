@@ -1,0 +1,116 @@
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq-default TeX-master nil)
+
+(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(setq reftex-plug-into-AUCTeX t)
+
+(setq TeX-PDF-mode t)
+
+(setq-default TeX-engine 'xetex)
+
+(setq TeX-view-program-list
+      '(("Xpdf" "xpdf %o")
+        ("Okular" "okular --unique %o#src:%n%b")
+        ("Evince" "evince %o")
+        ("Firefox" "firefox %o")
+        ("Zathura" "zathura %o")))
+
+(setq TeX-view-program-selection '((output-pdf "Zathura")))
+
+(add-hook 'LaTeX-mode-hook 'cdlatex-mode)
+
+(setq cdlatex-math-symbol-alist
+      '((?a ("\\alpha"))
+        (?b ("\\beta"))
+        (?g ("\\gamma"))
+        ;; etc.
+        ))
+
+(setq cdlatex-math-modify-alist
+      '((?C "\\mathcal" nil t nil)))
+
+(setq preview-auto-cache-preamble t)
+(add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
+
+(custom-set-variables
+ '(TeX-source-correlate-method 'synctex)
+ '(TeX-source-correlate-mode t)
+ '(TeX-source-correlate-start-server t)
+)
+
+(defun my-cdlatex-part ()
+  (let ((title (read-string "Title: ")))
+    (insert (format "\\part{%s}\n\\label{prt:%s}" title (car (split-string title))))))
+
+(defun my-cdlatex-chapter ()
+  (let ((title (read-string "Title: ")))
+    (insert (format "\\chapter{%s}\n\\label{ch:%s}" title (car (split-string title))))))
+
+(defun my-cdlatex-section ()
+  (let ((title (read-string "Title: ")))
+    (insert (format "\\section{%s}\n\\label{sec:%s}" title (car (split-string title))))))
+
+(defun my-cdlatex-subsection ()
+  (let ((title (read-string "Title: ")))
+    (insert (format "\\subsection{%s}\n\\label{subsec:%s}" title (car (split-string title))))))
+
+(defun my-cdlatex-subsubsection ()
+  (let ((title (read-string "Title: ")))
+    (insert (format "\\subsubsection{%s}\n\\label{subsubsec:%s}" title (car (split-string title))))))
+
+(defun my-cdlatex-paragraph ()
+  (let ((title (read-string "Title: ")))
+    (insert (format "\\paragraph{%s}\n\\label{par:%s}" title (car (split-string title))))))
+
+(defun my-cdlatex-subparagraph ()
+  (let ((title (read-string "Title: ")))
+    (insert (format "\\subparagraph{%s}\n\\label{subpar:%s}" title (car (split-string title))))))
+
+(defun my-cdlatex-tabularx ()
+  (let* ((name (read-string "Table name: "))
+         (cols (read-string "Column names (comma separated): "))
+         (col-names (split-string cols ",")))
+    (insert (format "\\begin{table}[ht]\n\\centering\n\\caption{%s}\n\\label{tab:%s}\n\\begin{tabularx}{\\textwidth}{|%s|}\n\\hline\n"
+                    name (car (split-string name)) (make-string (length col-names) ?X)))
+    (dolist (col col-names)
+      (insert (format " %s &" (string-trim col))))
+    (delete-char -1)  ;; remove the last &
+    (insert "\\\\ \\hline\n\\end{tabularx}\n\\end{table}")))
+
+(defun my-cdlatex-longtable ()
+  (let* ((name (read-string "Table name: "))
+         (cols (read-string "Column names (comma separated): "))
+         (col-names (split-string cols ",")))
+    (insert (format "\\begin{longtable}{|%s|}\n\\caption{%s}\n\\label{tab:%s} \\\\\n\\hline\n"
+                    (make-string (length col-names) ?c) name (car (split-string name))))
+    (dolist (col col-names)
+      (insert (format " %s &" (string-trim col))))
+    (delete-char -1)  ;; remove the last &
+    (insert "\\\\ \\hline\n\\endfirsthead\n\\end{longtable}")))
+
+
+
+
+(setq cdlatex-command-alist
+      '(("+-" "Insert plus-minus symbol" "" "\\pm " nil t t)
+        ("part" "Insert part" "" my-cdlatex-part nil t t)
+        ("ch" "Insert chapter" "" my-cdlatex-chapter nil t t)
+        ("sec" "Insert section" "" my-cdlatex-section nil t t)
+        ("subsec" "Insert subsection" "" my-cdlatex-subsection nil t t)
+        ("subsub" "Insert subsubsection" "" my-cdlatex-subsubsection nil t t)
+        ("par" "Insert paragraph" "" my-cdlatex-paragraph nil t t)
+        ("subpar" "Insert subparagraph" "" my-cdlatex-subparagraph nil t t)
+        ("part*" "Insert part*" "" "\\part*{?}\n\\label{prt:*}" nil nil t)
+        ("ch*" "Insert chapter*" "" "\\chapter*{?}\n\\label{ch:*}" nil nil t)
+        ("sec*" "Insert section*" "" "\\section*{?}\n\\label{sec:*}" nil nil t)
+        ("subsec*" "Insert subsection*" "" "\\subsection*{?}\n\\label{subsec:*}" nil nil t)
+        ("subsub*" "Insert subsubsection*" "" "\\subsubsection*{?}\n\\label{subsubsec:*}" nil nil t)
+        ("par*" "Insert paragraph*" "" "\\paragraph*{?}\n\\label{par:*}" nil nil t)
+        ("subpar*" "Insert subparagraph*" "" "\\subparagraph*{?}\n\\label{subpar:*}" nil nil t)
+        ("tabx" "Insert tabularx" "" my-cdlatex-tabularx nil t t)
+        ("longt" "Insert longtable" "" my-cdlatex-longtable nil t t)))

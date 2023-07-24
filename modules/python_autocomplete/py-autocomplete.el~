@@ -1,0 +1,25 @@
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+(package-install 'use-package))
+
+(require 'lsp-mode)
+(add-hook 'python-mode-hook #'lsp-deferred)
+
+;; If you want to use lsp-ui which provides additional features like code lenses and sideline information
+(use-package lsp-ui
+ :ensure t
+ :commands lsp-ui-mode)
+
+;; Using company-mode for completion
+(use-package company
+ :ensure t
+ :config
+ (setq company-idle-delay 0.3)
+ (setq company-minimum-prefix-length 1))
+
+;; Use pyvenv for Python environment management
+(use-package pyvenv
+ :ensure t
+ :config
+ (setenv "WORKON_HOME" "/path/to/your/python/environments") ; set to the path of your virtual environments
+ (pyvenv-mode 1))

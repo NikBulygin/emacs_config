@@ -3,8 +3,8 @@
 ;tt(setq flycheck-clang-standard-library "libc++")
 
 
-(unless (package-installed-p 'flycheck-inline)
-  (package-install 'flycheck-inline))
+;; (unless (package-installed-p 'flycheck-inline)
+;;   (package-install 'flycheck-inline))
 
 
 (with-eval-after-load 'flycheck

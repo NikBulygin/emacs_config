@@ -1,0 +1,10 @@
+;; Предварительно необходимо добавить репозиторий melpa
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+
+;; (unless (package-installed-p 'flycheck)
+;;   (package-refresh-contents)
+;;   (package-install 'flycheck))
+
+;; (global-flycheck-mode)
